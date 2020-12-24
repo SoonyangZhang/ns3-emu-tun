@@ -1,0 +1,45 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+def build(bld):
+    module = bld.create_ns3_module('emu-tun',['core','internet','network'])
+    module.source=[
+    'model/third_party/epoll/simple_epoll_server.cc',
+    'model/third_party/tuntap/tuntap.c',
+    'model/third_party/tuntap/tuntap-log.c',
+    'model/third_party/tuntap/tuntap-unix.c',
+    'model/third_party/tuntap/tuntap-unix-linux.c',
+    'model/third_party/net/ip_address.cc',
+    'model/third_party/net/net_codec.cc',    
+    'model/base_thread.cc',
+    'model/emu_udp.cc',
+    'model/epoll_thread.cc',
+    'model/tun_interface.cc',    
+    'model/tun_server.cc',
+    'model/tun_util.cc',
+    ]
+    module.cxxflags = ['-std=c++11', '-g']
+    module.env.append_value("CFLAGS","-fPIC")
+    module.env.append_value('DEFINES', 'NDEBUG')
+    headers = bld(features='ns3header')
+    headers.module = 'emu-tun'
+    headers.source = [
+    'model/third_party/epoll/simple_epoll_server.h',
+    'model/third_party/net/ip_address.h',
+    'model/third_party/net/ip_address_family.h',
+    'model/third_party/net/net_codec.h',
+    'model/third_party/net/net_endian.h',
+    'model/base_thread.h',
+    'model/emu_udp.h',
+    'model/epoll_api.h',
+    'model/epoll_thread.h',
+    'model/tun_interface.h',
+    'model/tun_mutex.h',      
+    'model/tun_server.h',
+    'model/tun_util.h',
+    ]    
+    module.env['INCLUDES'] += [
+    'model',
+    'model/third_party/epoll',
+    'model/third_party/logging',
+    'model/third_party/tuntap',
+    'model/third_party/net',
+    ]
